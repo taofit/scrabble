@@ -2,8 +2,10 @@ package database
 
 import (
 	"fmt"
+	"log"
 	"os"
 
+	"gihub.com/taofit/scrabble/models"
 	"gorm.io/driver/postgres"
 	"gorm.io/gorm"
 	"gorm.io/gorm/logger"
@@ -21,7 +23,20 @@ func ConnectDb() {
 		os.Getenv("DB_PASSWORD"),
 		os.Getenv("DB_NAME"))
 
-	gorm.Open(postgres.Open(dsn), &gorm.Config{
+	db, err := gorm.Open(postgres.Open(dsn), &gorm.Config{
 		Logger: logger.Default.LogMode(logger.Info),
 	})
+
+	if err != nil {
+		log.Fatal("Failed to connect to database .\n", err)
+		os.Exit(1)
+	}
+	log.Println("connected")
+	db.Logger = logger.Default.LogMode(logger.Info)
+	log.Println("running migrations")
+	db.AutoMigrate(&models.Fact{})
+
+	DB = Dbinstance{
+		Db: db,
+	}
 }

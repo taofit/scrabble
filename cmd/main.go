@@ -1,13 +1,18 @@
 package main
 
-import "github.com/gofiber/fiber/v2"
+import (
+	"log"
+
+	"gihub.com/taofit/scrabble/database"
+	"github.com/gofiber/fiber/v2"
+)
 
 func main() {
+	database.ConnectDb()
 	app := fiber.New()
-
-	app.Get("/", func(c *fiber.Ctx) error {
-		return c.SendString("Hello, Alice's World! mkey example and his example...")
-	})
+	setupRoutes(app)
+	var Game = newGame()
+	log.Printf("%v", Game)
 
 	app.Listen(":3003")
 }
