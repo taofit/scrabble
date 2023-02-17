@@ -5,7 +5,7 @@ import (
 	"log"
 	"os"
 
-	"gihub.com/taofit/scrabble/models"
+	"github.com/taofit/scrabble/models"
 	"gorm.io/driver/postgres"
 	"gorm.io/gorm"
 	"gorm.io/gorm/logger"

@@ -1,4 +1,4 @@
-module gihub.com/taofit/scrabble
+module github.com/taofit/scrabble
 
 go 1.18
 

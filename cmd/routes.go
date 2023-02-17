@@ -1,11 +1,12 @@
 package main
 
 import (
-	"gihub.com/taofit/scrabble/handlers"
 	"github.com/gofiber/fiber/v2"
+	"github.com/taofit/scrabble/handlers"
 )
 
-func setupRoutes(app *fiber.App) {
+func setupRoutes(app *fiber.App, game *handlers.Game) {
+	app.Post("/move", game.Move)
 	app.Get("/", handlers.ListFacts)
 	app.Post("/fact", handlers.CreateFact)
 }
