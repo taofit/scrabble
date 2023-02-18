@@ -4,6 +4,13 @@ import (
 	"encoding/json"
 	"io/ioutil"
 	"log"
+	"math/rand"
+	"time"
+)
+
+const (
+	deckSize  = 7
+	boardSize = 15
 )
 
 type Letter struct {
@@ -17,27 +24,33 @@ type LettersStruct struct {
 
 type Game struct {
 	Bag   []string
-	Board [15][15]byte
-	Deck1 [7]string
-	Deck2 [7]string
+	Board [boardSize][boardSize]string
+	Deck1 []string
+	Deck2 []string
+	Score1 int
+	Score2 int
 }
 
 func NewGame() *Game {
-	bag := resetBag()
-	board := resetBoard()
+	bag := initBag()
+	board := initBoard()
+	deck1 := initDeck(&bag)
+	deck2 := initDeck(&bag)
 
 	return &Game{
 		Bag:   bag,
 		Board: board,
+		Deck1: deck1,
+		Deck2: deck2,
 	}
 }
 
-func resetBoard() [15][15]byte {
-	board := [15][15]byte{}
+func initBoard() [15][15]string {
+	board := [15][15]string{}
 	return board
 }
 
-func resetBag() []string {
+func initBag() []string {
 	var lettersMap = parseFile()
 	var bag []string
 	for key, letter := range lettersMap {
@@ -47,6 +60,27 @@ func resetBag() []string {
 	}
 
 	return bag
+}
+
+func initDeck(bag *[]string) []string {
+	var deck []string
+	rand.Seed(time.Now().Unix())
+	for i := 0; i < deckSize; i++ {
+		randomIdx := rand.Intn(len(*bag))
+		deck = append(deck, (*bag)[randomIdx])
+		removeElementByIdx(bag, randomIdx)
+	}
+	return deck
+}
+
+func removeElementByIdx(bag *[]string, idx int) {
+	bagLen := len(*bag)
+	bagLastInx := bagLen - 1
+
+	if idx != bagLastInx {
+		(*bag)[idx] = (*bag)[bagLastInx]
+	}
+	*bag = (*bag)[:bagLastInx]
 }
 
 func parseFile() map[string]Letter {
