@@ -24,11 +24,11 @@ type LettersStruct struct {
 }
 
 type Game struct {
-	mx sync.Mutex
-	Bag   []string
-	Board [boardSize][boardSize]string
-	Deck1 []string
-	Deck2 []string
+	mx     sync.Mutex
+	Bag    []string
+	Board  [boardSize][boardSize]string
+	Deck1  []string
+	Deck2  []string
 	Score1 int
 	Score2 int
 }
@@ -56,6 +56,9 @@ func initBag() []string {
 	var lettersMap = parseFile()
 	var bag []string
 	for key, letter := range lettersMap {
+		if len(key) > 1 || key[0] < 'a' || key[0] > 'z' {
+			log.Fatal("key must be one alphabetic in lower case")
+		}
 		for i := 0; i < letter.Tiles; i++ {
 			bag = append(bag, key)
 		}
