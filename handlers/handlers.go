@@ -35,17 +35,36 @@ func (game *Game) Move(c *fiber.Ctx) error {
 	}
 
 	fmt.Println("body: ", move)
-	if isValidWord(move.Word) {
+	player := move.Player
+	if player != 1 && player != 2 {
+		return c.Status(400).JSON("invalid player value, should be either 1 or 2")
+	}
+	if game.isValidWord(move.Word, player) {
 		inputWordPoints := buildWordPoints(move.Word)
-		if game.isWordInCorrectPosition(inputWordPoints) {
+		if game.isBoardEmpty() || game.isWordInCorrectPosition(inputWordPoints) {
 			for _, letterPoint := range inputWordPoints {
+				game.mx.Lock()
 				game.Board[letterPoint.Point.X][letterPoint.Point.Y] = letterPoint.Letter
+				game.mx.Unlock()
 			}
-			return c.Status(200).JSON(move)
+			game.calculateScore(inputWordPoints, player)
+			return c.Status(200).JSON(game)
 		}
+		return c.Status(400).JSON("word is in wrong position")
 	}
 
 	return c.Status(400).JSON("invalid word format")
+}
+
+func (game *Game) isBoardEmpty() bool {
+	for _, row := range game.Board {
+		for _, val := range row {
+			if val != "" {
+				return false
+			}
+		}
+	}
+	return true
 }
 
 func (game *Game) calculateScore(inputWordPoints []LetterPoint, player int) {
@@ -62,30 +81,58 @@ func (game *Game) calculateScore(inputWordPoints []LetterPoint, player int) {
 	}
 }
 
-func isValidWord(word Word) bool {
+func (game *Game) isValidWord(word Word, player int) bool {
 	wordLen := len(word.Word)
 	if wordLen < 2 || wordLen > 7 {
 		return false
 	}
-	for _, r := range word.Word {
-		if r < 'a' || r > 'z' {
-			return false
-		}
+
+	if player == 1 && !isAllLetterInDeck(word.Word, game.Deck1) {
+		return false
+	}
+
+	if player == 2 && !isAllLetterInDeck(word.Word, game.Deck2) {
+		return false
 	}
 
 	pointStart := word.PointStart
 	pointEnd := word.PointEnd
 
 	if areAllLettersInBoard(pointStart, pointEnd) {
-		if pointStart.X == pointEnd.X && pointStart.Y-pointEnd.Y+1 == wordLen {
+		if pointStart.X == pointEnd.X && abs(pointStart.Y, pointEnd.Y)+1 == wordLen {
 			return true
 		}
-		if pointStart.Y == pointEnd.Y && pointStart.X-pointEnd.X+1 == wordLen {
+		if pointStart.Y == pointEnd.Y && abs(pointStart.X, pointEnd.X)+1 == wordLen {
 			return true
 		}
 	}
 
 	return false
+}
+
+func isAllLetterInDeck(word string, deck []string) bool {
+	for _, inputLetter := range word {
+		if !isLetterInDeck(string(inputLetter), deck) {
+			return false
+		}
+	}
+	return true
+}
+
+func isLetterInDeck(inputLetter string, deck []string) bool {
+	for _, deckLetter := range deck {
+		if inputLetter == deckLetter {
+			return true
+		}
+	}
+	return false
+}
+
+func abs(x, y int) int {
+	if x < y {
+		return y - x
+	}
+	return x - y
 }
 
 func areAllLettersInBoard(pointStart Point, pointEnd Point) bool {
@@ -143,7 +190,7 @@ func buildWordPoints(word Word) []LetterPoint {
 	return inputWordPoints
 }
 
-func (game Game) isWordInCorrectPosition(inputWordPoints []LetterPoint) bool {
+func (game *Game) isWordInCorrectPosition(inputWordPoints []LetterPoint) bool {
 	for _, letterPoint := range inputWordPoints {
 		if game.Board[letterPoint.Point.X][letterPoint.Point.Y] != "" {
 			return false
@@ -185,6 +232,10 @@ func (game *Game) isNeighbourPlacedOnBoard(neighbourX int, neighbourY int) bool 
 		return false
 	}
 	return game.Board[neighbourX][neighbourY] != ""
+}
+
+func (game *Game) Status(c *fiber.Ctx) error {
+	return c.Status(200).JSON(game)
 }
 
 func ListFacts(c *fiber.Ctx) error {

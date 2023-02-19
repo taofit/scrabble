@@ -5,6 +5,7 @@ import (
 	"io/ioutil"
 	"log"
 	"math/rand"
+	"sync"
 	"time"
 )
 
@@ -23,6 +24,7 @@ type LettersStruct struct {
 }
 
 type Game struct {
+	mx sync.Mutex
 	Bag   []string
 	Board [boardSize][boardSize]string
 	Deck1 []string

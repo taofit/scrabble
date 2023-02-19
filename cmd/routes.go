@@ -7,6 +7,6 @@ import (
 
 func setupRoutes(app *fiber.App, game *handlers.Game) {
 	app.Post("/move", game.Move)
+	app.Get("/Status", game.Status)
 	app.Get("/", handlers.ListFacts)
-	app.Post("/fact", handlers.CreateFact)
 }
