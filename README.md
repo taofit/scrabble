@@ -1,0 +1,2 @@
+# scrabble
+scrabble in golang
