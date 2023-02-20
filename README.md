@@ -33,6 +33,7 @@ The second end point is to fetch current game status, it is a GET request: `http
 
 the result returned from the end point is as follows:
 
+
 `{
 	"Bag": [
 		"y",
@@ -396,6 +397,10 @@ the result returned from the end point is as follows:
 `Deck2` shows player 2's tiles in his/her deck
 `Score1` current score of player 1
 `Score2` current score of player 2
+<<<<<<< HEAD
+=======
+````
+>>>>>>> 7c5863e100a78bedbfb4587763816b2f659c8d87
 
 ## program description
 
