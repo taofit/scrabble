@@ -11,17 +11,16 @@ in postman or insomnia, choose JSON format and past json string as follows to ma
 
 ```
 {
-"Word":
-{
-"Word": "aim",
-"PointStart": {
-"x": 3,
-"y": 7
-},
-"PointEnd": {
-"x": 3,
-"y": 9
-}
+"Word": {
+    "Word": "aim",
+    "PointStart": {
+        "x": 3,
+        "y": 7
+    },
+    "PointEnd": {
+        "x": 3,
+        "y": 9
+    }
 },
 "Player": 1
 }
@@ -396,6 +395,11 @@ the result returned from the end point is as follows:
 `Deck2` shows player 2's tiles in his/her deck
 `Score1` current score of player 1
 `Score2` current score of player 2
+<<<<<<< HEAD
+=======
+
+```
+>>>>>>> 7c5863e100a78bedbfb4587763816b2f659c8d87
 
 ## program description
 
@@ -404,3 +408,4 @@ The game status is saved in a `Game` struct, each time a player successfully pla
 ## testing
 
 run testing under internal folder by entering : `go test -v ./...`
+```
