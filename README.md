@@ -397,9 +397,14 @@ the result returned from the end point is as follows:
 `Score2` current score of player 2
 <<<<<<< HEAD
 =======
+<<<<<<< HEAD
 
 ```
->>>>>>> 7c5863e100a78bedbfb4587763816b2f659c8d87
+=======
+```
+
+> > > > > > > f4a959908d30638a852de730a4c647647544d545
+> > > > > > > 7c5863e100a78bedbfb4587763816b2f659c8d87
 
 ## program description
 
@@ -408,4 +413,7 @@ The game status is saved in a `Game` struct, each time a player successfully pla
 ## testing
 
 run testing under internal folder by entering : `go test -v ./...`
+
+```
+
 ```
