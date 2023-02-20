@@ -38,7 +38,7 @@ func (game *Game) Move(c *fiber.Ctx) error {
 	player := move.Player
 
 	if len(game.Bag) == 0 && (len(game.Deck1) == 0 || len(game.Deck2) == 0) {
-		return c.Status(200).JSON("game over.")
+		return c.Status(200).JSON(fiber.Map{"status": "game over.", "result": game})
 	}
 	if player != 1 && player != 2 {
 		return c.Status(400).JSON("invalid player value, should be either 1 or 2")
@@ -69,7 +69,7 @@ func (game *Game) Move(c *fiber.Ctx) error {
 			game.buildDeck(move.Word.Word, player)
 
 			if len(game.Bag) == 0 && (len(game.Deck1) == 0 || len(game.Deck2) == 0) {
-				return c.Status(200).JSON("game over.")
+				return c.Status(200).JSON(fiber.Map{"status": "game over.", "result": game})
 			}
 
 			return c.Status(200).JSON(move)
