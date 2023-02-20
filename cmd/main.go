@@ -4,13 +4,13 @@ import (
 	"log"
 
 	"github.com/gofiber/fiber/v2"
-	"github.com/taofit/scrabble/handlers"
+	"github.com/taofit/scrabble/internal"
 )
 
 func main() {
 	app := fiber.New()
-	var game = handlers.NewGame()
-	setupRoutes(app, game)
+	var game = internal.NewGame()
+	internal.SetupRoutes(app, game)
 	log.Printf("game: %v", game)
 
 	app.Listen(":3000")
