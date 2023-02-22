@@ -13,5 +13,5 @@ func main() {
 	internal.SetupRoutes(app, game)
 	log.Printf("game: %v", game)
 
-	app.Listen(":3000")
+	panic(app.Listen(":3000"))
 }
