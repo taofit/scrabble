@@ -5,6 +5,8 @@ import (
 	"io/ioutil"
 	"log"
 	"math/rand"
+	"path/filepath"
+	"runtime"
 	"sync"
 	"time"
 )
@@ -12,6 +14,11 @@ import (
 const (
 	deckSize  = 7
 	boardSize = 15
+)
+
+var (
+	_, b, _, _ = runtime.Caller(0)
+	basePath   = filepath.Dir(b)
 )
 
 type Letter struct {
@@ -89,7 +96,7 @@ func removeElementByIdx(bag *[]string, idx int) {
 }
 
 func parseFile() map[string]Letter {
-	content, err := ioutil.ReadFile("./letters.json")
+	content, err := ioutil.ReadFile(basePath + "/../letters.json")
 	if err != nil {
 		log.Fatal("Error when opening file: ", err)
 	}
